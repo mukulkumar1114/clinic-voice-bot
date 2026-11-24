@@ -56,7 +56,9 @@ small = cust("I17")["home_clinic_id"]
 check("I17 small clinic can't do surgery", "does not do surgery" in db.free_slots(small, tom + timedelta(days=1), "surgery")["reason"])
 check("Surgery only 10-12", set(db.free_slots(1, today + timedelta(days=5), "surgery")["slots"]) <= db.SURGERY_SLOTS)
 bird_clinic = cust("I26")["home_clinic_id"]
-s = db.free_slots(bird_clinic, today + timedelta(days=3), "consult", "bird")
+closed = db.clinic(bird_clinic)["closed_weekday"]
+bird_day = next(today + timedelta(days=n) for n in range(2, 9) if (today + timedelta(days=n)).weekday() != closed)  # skip the clinic's closed day
+s = db.free_slots(bird_clinic, bird_day, "consult", "bird")
 docs = {n for v in s["slots"].values() for n in v}
 exotic_docs = {d["name"] for d in db.doctors(bird_clinic) if d["speciality"] == "Exotics"}
 check("I26 bird only with Exotics doctor", docs and docs <= exotic_docs, str(docs))

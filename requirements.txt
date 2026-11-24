@@ -1,0 +1,7 @@
+livekit-agents==1.8.13
+livekit-plugins-silero==1.8.13
+livekit-plugins-anthropic==1.8.13
+livekit-plugins-turn-detector==1.8.13
+faker==40.54.0
+python-dotenv
+aiohttp
