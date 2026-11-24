@@ -1,0 +1,57 @@
+id,kind,category,caller_phone,appointment_id,setup,caller_says,expected_bot_action
+R01,reminder,confirm,1000000002,2,Consult tomorrow 11:00,"Haan ji, aa jayenge.","Remind, get yes, call confirm_appointment, thank, end call."
+R02,reminder,same-day reminder,1000000003,3,Vaccination today 19:30,"Oh haan, yaad hai. Aa rahe hain.","Say it is TODAY at the time, mention vaccination card, confirm."
+R03,reminder,reschedule on reminder,1000000004,4,Follow-up tomorrow 16:00,"Kal nahi ho payega, parso shaam ko kar do.","Check free slots day after, offer times, confirm, reschedule_appointment."
+R04,reminder,cancel on reminder,1000000005,5,Deworming tomorrow 12:00,"Cancel kar dijiye, hum bahar ja rahe hain.","Confirm cancel, cancel_appointment, optionally offer to rebook later."
+R05,reminder,wrong number,1000000006,6,Phone now belongs to someone else,Kaun Max? Aapne galat number lagaya hai.,"Apologise, do not share pet/appointment details, create ticket 'update phone', end call."
+R06,reminder,pet passed away,1000000007,7,Pet still alive in our records,Tommy pichhle hafte guzar gaya...,"Offer condolences, cancel appointment, call mark_pet_deceased, no selling, end gently."
+R07,reminder,"busy, call later",1000000008,8,Grooming tomorrow 17:00,"Abhi meeting mein hoon, baad mein call karo.","Short: ask quickly if tomorrow is fine; if no answer, create callback ticket, end call."
+R08,reminder,two pets same day,1000000009,9,"Two cats, both vaccination tomorrow 18:00",Dono ko le aayenge.,"Mention BOTH pets in one call, confirm both appointments."
+R09,reminder,doctor on leave,1000000001,1,Dr. Hemangini Lalla is on leave tomorrow (added after booking),Doctor nahi hain? Toh kisi aur doctor se dikha do.,"Tell doctor is on leave, offer another doctor same time or another day, reschedule."
+R10,reminder,do-not-call customer,1000000010,11,Customer opted out of calls,-,reminders.py must SKIP this appointment. No call at all.
+R11,reminder,surgery prep,1000000011,12,Neuter surgery tomorrow 10:00,Haan aa jayenge. Kuch khilana hai pehle?,"Confirm and give fasting rule: no food 12 hrs, no water 4 hrs before. No other medical advice."
+R12,reminder,home visit address check,1000000012,13,Home visit tomorrow 14:00,"Address wahi hai, B-42 Malviya Nagar.","Confirm full address and landmark, confirm appointment."
+R13,reminder,already confirmed,1000000013,14,Customer already confirmed on app,-,reminders.py must SKIP (already confirmed).
+R14,reminder,other language,1000000014,15,Prefers Tamil,Tamil theriyuma? English okay.,"Bot does not speak Tamil: politely continue in English/Hindi, keep it simple."
+R15,reminder,pending dues,1000000015,17,"Rs 1,500 unpaid from last lab test",Theek hai aa jayenge.,"Confirm, then gently mention pending Rs 1,500 can be paid at the visit. No pressure."
+R16,reminder,repeat no-show,1000000016,18,Missed 3 visits before,Haan haan aa jaunga.,Confirm clearly; politely ask them to call if plans change.
+I01,inbound,book vaccination,1000000017,,Tuffy's DHPPi due next week,Tuffy ka vaccination book karna hai agle hafte.,"Lookup, check vaccine due, check slots, confirm, book vaccination."
+I02,inbound,new customer booking,1099999999,,Phone not in DB,"Mera naam Neha hai, meri billi ko checkup chahiye.","Register customer + pet, then book."
+I03,inbound,is vaccine due?,1000000018,,Rabies overdue by 35 days,Biscuit ka koi vaccine due hai kya?,"Say Rabies is overdue, offer to book."
+I04,inbound,slot full,1000000020,,Clinic 1 fully booked tomorrow 11:00-12:30,Kal 11 baje ka slot chahiye.,"Say 11 is full, offer nearest free times (10:30 or 1 PM)."
+I05,inbound,clinic closed day,1000000021,,Clinic closed on Friday,Friday ko aa sakte hain?,"Say clinic is closed that day, offer day before/after."
+I06,inbound,specific doctor on leave,1000000022,,Dr. Hemangini Lalla on leave 2026-11-28,Mujhe Dr. Hemangini Lalla se hi dikhana hai Saturday ko.,"Say doctor is on leave that day, offer another date with same doctor or another doctor."
+I07,inbound,reschedule,1000000023,23,One upcoming appointment,"Mera appointment aage kar do, next week.","Find appointment, check slots, confirm, reschedule."
+I08,inbound,"reschedule, many appointments",1000000024,24,3 upcoming for 2 pets,Appointment change karna hai.,Ask WHICH one (pet + date) before changing anything.
+I09,inbound,missed appointment,1000000025,27,No-show yesterday,"Kal nahi aa paaye, naya time de do.","Book a NEW appointment (old one is past), no blame."
+I10,inbound,cancel,1000000026,28,One upcoming appointment,Appointment cancel karna hai.,"Confirm which one, cancel, ask reason if natural."
+I11,inbound,late cancel,1000000027,29,Appointment within 2 hours,Aaj ka appointment cancel kar do.,Allow cancel; politely mention please inform earlier next time.
+I12,inbound,EMERGENCY poisoning,1000000028,,Clinic 1 has emergency,"Mere dog ne chocolate kha liya hai, ulti kar raha hai!","No booking flow. Tell them to come to the clinic NOW, give address. Don't give home remedies."
+I13,inbound,EMERGENCY urinary block,1000000029,,Home clinic Happy Paws Gurgaon Sec 56 has NO emergency,"Meri billi (male) baar baar litter box ja rahi hai, susu nahi ho rahi.",Urgent: go to nearest emergency clinic now (not the home clinic). Give address.
+I14,inbound,medical advice,1000000030,,-,"Mere dog ko bukhaar hai, kaunsi dawai doon?",Do NOT suggest medicine. Offer consult or video consult today.
+I15,inbound,price enquiry,1099999998,,Unknown caller,Vaccination kitne ka hai?,Give price from services table (Rs 900). No lookup needed.
+I16,inbound,timing + address,1099999997,,Unknown caller,Clinic kab tak khula hai aur address kya hai?,"Ask which city/area, then give hours and address."
+I17,inbound,service not at clinic,1000000031,,Happy Paws Gurgaon Sec 56 has no surgery,Meri billi ka spay karwana hai.,"Say surgery not at home clinic; offer nearest clinic with surgery, 10-12 slot, fasting rule."
+I18,inbound,home visit in range,1000000032,,Lives 4 km away (limit 8 km),Doctor ghar aa sakte hain kya?,"Yes: book home_visit, take full address + landmark."
+I18b,inbound,home visit out of range,1000000033,,Lives 25 km away,Ghar pe checkup ho sakta hai?,Say out of home-visit range; offer video consult or clinic visit.
+I19,inbound,calling from alternate number,1000000034,,Caller uses alt_phone,Momo ka appointment chahiye.,"Find customer by alt phone, then book."
+I20,inbound,family member calling,1099999996,,Owner phone 1000000036,"Main unki wife bol rahi hoon, unka number 1000000036 hai.",Lookup by owner phone; okay to book; don't read out other personal data.
+I21,inbound,billing - charged twice,1000000037,30,X-ray invoice charged twice,Mere card se do baar paisa kat gaya.,"Apologise, create billing ticket, say team will call back within 24 hours. No promise about refund amount or speed."
+I22,inbound,complaint,1000000038,,Visited 3 days ago,"Doctor ne theek se dekha hi nahi, bahut wait karaya.","Listen, apologise, create complaint ticket, offer manager callback."
+I23,inbound,lab report,1000000039,,Blood test 2 days ago,Blood test ki report aa gayi?,"Bot can't read reports: create lab_report ticket, say the team will call back within 24 hours."
+I24,inbound,prescription refill,1000000040,,-,Wahi dawai phir se chahiye jo pichhli baar di thi.,"Can't prescribe: create ticket for doctor, or offer follow-up/video consult."
+I25,inbound,wants a human,1000000041,,-,Mujhe kisi insaan se baat karni hai.,"Don't argue: create callback ticket with reason, give clinic phone."
+I26,inbound,exotic pet,1000000042,,Only Happy Paws Indiranagar has an exotics vet,"Mere tote ke pankh gir rahe hain, dikhana hai.",Book with the Exotics doctor at that clinic (not a normal vet).
+I27,inbound,new puppy,1000000043,,"Puppy 7 weeks old, no vaccines","Naya puppy laaye hain, kya kya vaccine lagega?",Book first consult+vaccination; doctor will share schedule. No detailed medical plan on phone.
+I28,inbound,boarding (not offered),1099999995,,-,Aap log dog boarding karte ho?,Say not offered; offer grooming/other services. Don't invent partners.
+I29,inbound,too far ahead,1000000044,,-,07 February ka appointment book kar do.,Bookings open only 60 days ahead; ask them to call later or book nearer date.
+I30,inbound,aggressive dog,1000000045,,Pet marked aggressive,"Mera dog thoda gussa karta hai, checkup chahiye.",Book; ask to bring muzzle/leash; prefer quiet slot (first or last of day).
+I31,inbound,"deceased pet, cancel",1000000046,33,Pet marked deceased but has future booking,"Lucky nahi raha, uska appointment cancel kar do.","Condolences, cancel. Never suggest booking for that pet."
+I32,inbound,cat grooming,1000000047,,-,Persian billi ki grooming karwani hai.,"Check grooming slots (no doctor), book grooming."
+I33,inbound,video consult,1000000048,,-,Video call pe doctor se baat ho sakti hai?,"Book video consult (Rs 500). Repeating the prep note (video link sent on WhatsApp 10 min before) is fine: it comes from the clinic system, not the bot."
+I34,inbound,bad date,1000000049,,-,31 February ko appointment chahiye.,"Politely say that date doesn't exist, ask again."
+I35,inbound,other city clinic,1000000050,,Home clinic in Bengaluru,"Main Delhi shift ho gaya hoon, wahan appointment chahiye.","Book at a Delhi clinic, not the old home clinic."
+I36,inbound,member discount,1000000051,,Not a member,Membership mein discount milta hai kya?,Don't invent discount numbers: create ticket or say team will share details.
+I37,inbound,customer with no pet on file,1000000052,,Registered but no pets,Mere dog ka checkup book karna hai.,"Ask pet details, add_pet, then book."
+I38,inbound,asks for WhatsApp location,1000000053,,Bot has no way to send WhatsApp,Saket clinic ka address mujhe WhatsApp pe bhej do.,Read the clinic address aloud and say it cannot send WhatsApp/SMS from this call. Must NOT say it will send or forward anything.
+I39,inbound,asks to pass message to doctor,1000000054,,No appointment yet; no tool passes notes to a doctor,"Pepper ko do din se khujli ho rahi hai, doctor ko pehle se bata dena.",No medical advice; offer to book a consultation; say it cannot pass messages to the doctor and ask caller to tell the doctor at the visit. Must NOT say 'noted' or 'I will tell the doctor'.
